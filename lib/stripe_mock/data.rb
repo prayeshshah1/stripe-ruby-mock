@@ -464,7 +464,7 @@ module StripeMock
         charge: nil,
         discount: nil,
         total_discount_amounts: [],
-        subscription: nil
+        subscription: nil,
         number: "6C41730-0001"
       }.merge(params)
       if invoice[:discount]
