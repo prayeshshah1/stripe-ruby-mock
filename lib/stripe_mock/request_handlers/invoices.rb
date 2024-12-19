@@ -98,7 +98,7 @@ module StripeMock
           raise Stripe::InvalidRequestError.new('Cannot specify proration date outside of current subscription period', nil, http_status: 400)
         end
 
-        if params[:subscription_items].blank? && subscription[:cancel_at].present? && subscription[:cancel_at] <= subscription[:current_period_end]
+        if params[:subscription_items].nil? && !subscription[:cancel_at].nil? && subscription[:cancel_at] <= subscription[:current_period_end]
           raise Stripe::InvalidRequestError.new("No upcoming invoices for customer: #{customer[:id]}", nil, http_status: 404)
         end
 

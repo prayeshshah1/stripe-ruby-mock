@@ -193,6 +193,7 @@ shared_examples "Product API" do
       :caption,
       :created,
       :deactivate_on,
+      :default_price,
       :description,
       :images,
       :livemode,

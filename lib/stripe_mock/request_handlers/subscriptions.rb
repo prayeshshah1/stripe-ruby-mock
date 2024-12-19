@@ -55,7 +55,7 @@ module StripeMock
         # Note: needs updating for subscriptions with multiple plans
         verify_card_present(customer, subscription_plans.first, subscription, params)
 
-        if (coupon_id = params[:coupon] || params.dig(:discounts, 0, :coupon)).present?
+        if !(coupon_id = params[:coupon] || params[:discounts]&.dig(0, :coupon)).nil?
           # assert_existence returns 404 error code but Stripe returns 400
           # coupon = assert_existence :coupon, coupon_id, coupons[coupon_id]
 
@@ -127,7 +127,7 @@ module StripeMock
           raise Stripe::InvalidRequestError.new("You may only specify one of these parameters: coupon, promotion_code", "coupon", http_status: 400)
         end
 
-        if (coupon_id = params[:coupon] || params.dig(:discounts, 0, :coupon)).present?
+        if !(coupon_id = params[:coupon] || params[:discounts]&.dig(0, :coupon)).nil?
           # assert_existence returns 404 error code but Stripe returns 400
           # coupon = assert_existence :coupon, coupon_id, coupons[coupon_id]
 
@@ -175,8 +175,8 @@ module StripeMock
           intent_status = subscription[:status] == 'incomplete' ? 'requires_payment_method' : 'succeeded'
           intent = Data.mock_payment_intent({
             status: intent_status,
-            amount: subscription[:plan][:amount],
-            currency: subscription[:plan][:currency]
+            amount: subscription_plans.first[:unit_amount],
+            currency: subscription_plans.first[:currency]
           })
           payment_intent = intent
         end
